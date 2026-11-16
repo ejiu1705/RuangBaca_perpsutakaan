@@ -18,37 +18,16 @@ if (
 putenv('VIEW_COMPILED_PATH=' . $compiledViews);
 $_ENV['VIEW_COMPILED_PATH'] = $compiledViews;
 $_SERVER['VIEW_COMPILED_PATH'] = $compiledViews;
-// Diagnostik URI request dari Vercel.
-$requestUri = $_SERVER['REQUEST_URI'] ?? '';
 
-error_log(
-    'RUANGBACA_DIAG_URI_PATH: ' .
-    (parse_url($requestUri, PHP_URL_PATH) ?: '[EMPTY]')
-);
-
-foreach ([
-    'SCRIPT_NAME',
-    'PHP_SELF',
-    'PATH_INFO',
-    'REDIRECT_URL',
-    'HTTP_X_NOW_ROUTE_MATCHES',
-] as $key) {
-    error_log(
-        'RUANGBACA_DIAG_' . $key . ': ' .
-        ($_SERVER[$key] ?? '[NOT SET]')
-    );
-}
-
-// Diagnostik sementara untuk Runtime Logs Vercel.
-// Pertahankan URL asli yang dikirim oleh Vercel.
+// Pertahankan URI asli dari Vercel.
 $originalRequestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $_SERVER['REQUEST_URI'] = $originalRequestUri;
 
-// Hindari PHP menganggap /api/index.php sebagai base URL Laravel.
+// Hilangkan identitas router PHP dari base URL Laravel.
 $_SERVER['SCRIPT_NAME'] = '/__vercel_front_controller.php';
 $_SERVER['PHP_SELF'] = '/__vercel_front_controller.php';
 
-// Hapus informasi path milik router PHP Vercel.
+// Hapus PATH_INFO agar Laravel membaca URI asli.
 unset(
     $_SERVER['PATH_INFO'],
     $_SERVER['ORIG_PATH_INFO'],
@@ -56,8 +35,12 @@ unset(
 );
 
 // Diagnostik sementara.
-error_log('RUANGBACA_NORMALIZED_URI: ' . $_SERVER['REQUEST_URI']);
-error_log('RUANGBACA_NORMALIZED_SCRIPT: ' . $_SERVER['SCRIPT_NAME']);
+error_log('RUANGBACA_FIXED_URI: ' . $_SERVER['REQUEST_URI']);
+error_log('RUANGBACA_FIXED_SCRIPT: ' . $_SERVER['SCRIPT_NAME']);
+error_log(
+    'RUANGBACA_FIXED_PATH_INFO: ' .
+    ($_SERVER['PATH_INFO'] ?? '[UNSET]')
+);
 
 // Jalankan Laravel.
 require __DIR__ . '/../public/index.php';
