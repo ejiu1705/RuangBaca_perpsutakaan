@@ -40,12 +40,24 @@ foreach ([
 }
 
 // Diagnostik sementara untuk Runtime Logs Vercel.
-error_log('RUANGBACA_DIAG_VIEW_PATH: ' . $compiledViews);
-error_log('RUANGBACA_DIAG_BASE_PATH: ' . dirname(__DIR__));
-error_log(
-    'RUANGBACA_DIAG_BOOTSTRAP_CACHE: ' .
-    (is_dir(dirname(__DIR__) . '/bootstrap/cache') ? 'YES' : 'NO')
+// Pertahankan URL asli yang dikirim oleh Vercel.
+$originalRequestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$_SERVER['REQUEST_URI'] = $originalRequestUri;
+
+// Hindari PHP menganggap /api/index.php sebagai base URL Laravel.
+$_SERVER['SCRIPT_NAME'] = '/__vercel_front_controller.php';
+$_SERVER['PHP_SELF'] = '/__vercel_front_controller.php';
+
+// Hapus informasi path milik router PHP Vercel.
+unset(
+    $_SERVER['PATH_INFO'],
+    $_SERVER['ORIG_PATH_INFO'],
+    $_SERVER['ORIG_SCRIPT_NAME']
 );
+
+// Diagnostik sementara.
+error_log('RUANGBACA_NORMALIZED_URI: ' . $_SERVER['REQUEST_URI']);
+error_log('RUANGBACA_NORMALIZED_SCRIPT: ' . $_SERVER['SCRIPT_NAME']);
 
 // Jalankan Laravel.
 require __DIR__ . '/../public/index.php';
