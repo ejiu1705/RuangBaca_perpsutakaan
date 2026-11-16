@@ -48,7 +48,7 @@ class PeminjamanController extends Controller
     public function approve(Peminjaman $peminjaman): RedirectResponse
     {
         if ($peminjaman->status !== 'menunggu') {
-            return back()->withErrors(['status' => 'Hanya pengajuan berstatus menunggu yang dapat disetujui.']);
+            return back()->withErrors(['status' => 'Hanya pengajuan berstatus Menunggu Persetujuan yang dapat disetujui.']);
         }
 
         $peminjaman->update(['status' => 'disetujui']);
@@ -59,12 +59,12 @@ class PeminjamanController extends Controller
     public function reject(Peminjaman $peminjaman): RedirectResponse
     {
         if ($peminjaman->status !== 'menunggu') {
-            return back()->withErrors(['status' => 'Hanya pengajuan berstatus menunggu yang dapat ditolak.']);
+            return back()->withErrors(['status' => 'Hanya pengajuan berstatus Menunggu Persetujuan yang dapat ditolak.']);
         }
 
         $peminjaman->update(['status' => 'ditolak']);
 
-        return back()->with('status', 'Pengajuan peminjaman ditolak.');
+        return back()->with('status', 'Pengajuan peminjaman berhasil ditolak.');
     }
 
     public function returnBook(Peminjaman $peminjaman): RedirectResponse

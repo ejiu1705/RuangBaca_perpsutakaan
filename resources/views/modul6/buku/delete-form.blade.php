@@ -3,7 +3,7 @@
     @csrf
     @method('DELETE')
     <button type="submit" class="button danger small"
-            onclick="return confirm('Yakin ingin menghapus buku ini?')">
+            onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini? Tindakan ini tidak dapat dibatalkan.')">
         Hapus
     </button>
 </form>

@@ -32,7 +32,7 @@ class BukuController extends Controller
             'judul' => $item->judul,
             'penulis' => $item->penulis,
             'tahun' => $item->tahun_terbit,
-            'kategori' => $item->kategori?->nama ?? '-',
+            'kategori' => $item->kategori?->nama,
         ];
 
         return view('buku.show', ['buku' => $buku]);

@@ -210,3 +210,211 @@ body.app-body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSy
 .app-main .dashboard-welcome .welcome-bottom-note {
     color: rgba(255, 255, 255, 0.78) !important;
 }
+
+
+/* RuangBaca unified page system — shared by all authenticated modules */
+.rb-content{width:100%;max-width:1500px;margin:0 auto;display:grid;gap:17px}
+.rb-card{min-width:0;padding:22px;border:1px solid #e8edf4;border-radius:15px;background:#fff;box-shadow:var(--rb-shadow-soft)}
+.rb-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.rb-card-heading h2{margin:4px 0 0;color:#263955;font:850 16px/1.3 Manrope,Inter,sans-serif;letter-spacing:-.35px}
+.rb-card-heading p{margin:5px 0 0;color:#91a0b3;font-size:10px;line-height:1.6}
+.rb-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.rb-stat-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rb-stat-card{display:flex;flex-direction:column;gap:4px;min-width:0;padding:17px 19px;border:1px solid #e8edf4;border-radius:13px;background:#fff;box-shadow:var(--rb-shadow-soft)}
+.rb-stat-label{color:#8997ab;font-size:9px;font-weight:800;letter-spacing:.65px;text-transform:uppercase}
+.rb-stat-card strong{color:#263955;font:850 26px/1.15 Manrope,Inter,sans-serif;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.rb-stat-card small{color:#9aa7b8;font-size:9px}
+.rb-count-chip,.rb-role-chip{display:inline-flex;align-items:center;justify-content:center;padding:6px 9px;border:1px solid #e7edf5;border-radius:8px;background:#f8faff;color:#637795;font-size:9px;font-weight:800;white-space:nowrap}
+.rb-role-chip{background:#f0f4ff;border-color:#e0e8ff;color:#4b68b7}
+.rb-primary-text{color:#354964;font-weight:800}
+.rb-cell-subtext{display:block;margin-top:3px;color:#9ba8b8;font-size:9px}
+.rb-muted-text{color:#9aa6b6;font-size:9px}
+.rb-table-wrap{width:100%;overflow-x:auto;border:1px solid #edf1f6;border-radius:11px}
+.rb-table{width:100%;min-width:680px;border-collapse:separate;border-spacing:0;background:#fff}
+.rb-table thead th{padding:12px 13px;border-bottom:1px solid #e9eef5;background:#f7f9fc;color:#8190a5;text-align:left;font-size:8px;font-weight:850;letter-spacing:.72px;text-transform:uppercase;white-space:nowrap}
+.rb-table tbody td{padding:13px;border-bottom:1px solid #eff2f6;color:#64748b;font-size:10px;vertical-align:middle}
+.rb-table tbody tr:last-child td{border-bottom:0}
+.rb-table tbody tr:hover td{background:#fbfcff}
+.rb-inline-form,.rb-row-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.rb-inline-form select{width:auto;min-width:125px}
+.rb-row-actions form{margin:0}
+.rb-pagination{display:flex;justify-content:flex-end;padding-top:14px}
+.rb-pagination nav[role=navigation]{width:100%}
+.rb-empty-state{display:flex;flex-direction:column;align-items:center;gap:7px;padding:30px 14px;text-align:center;color:#96a3b5}
+.rb-empty-state strong{color:#536781;font-size:11px;font-weight:800}
+.rb-empty-state span{color:#9aa7b8;font-size:9px}
+.rb-empty-state .button{margin-top:6px}
+.rb-alert{padding:12px 14px;border:1px solid;border-radius:10px;font-size:10px;line-height:1.65}
+.rb-alert-success{border-color:#d9eee3;background:#f1faf5;color:#398566}
+.rb-alert-error{border-color:#f1dce0;background:#fff5f6;color:#b65d6b}
+.rb-alert-warning{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-color:#f2e5c9;background:#fffaf0;color:#9b763c;font-size:10px}
+.rb-alert-warning small{flex-basis:100%}
+.rb-text-button{padding:0;border:0;background:transparent;color:#456bc4;font-size:10px;font-weight:800;text-decoration:underline;cursor:pointer}
+.rb-form-stack{display:grid;gap:15px}
+.rb-form-field{display:flex;flex-direction:column;gap:6px;min-width:0;color:#52657e;font-size:10px;font-weight:800}
+.rb-form-field input,.rb-form-field select,.rb-form-field textarea{width:100%;min-height:41px;padding:10px 12px;border:1px solid #dfe6ef;border-radius:9px;background:#fff;color:#344762;font:500 11px Inter,system-ui,sans-serif;outline:none}
+.rb-form-field input:focus,.rb-form-field select:focus,.rb-form-field textarea:focus{border-color:#8aa2e8;box-shadow:0 0 0 3px rgba(76,108,200,.1)}
+.rb-form-field small{min-height:0;color:#c15d69;font-size:9px;font-weight:500}
+.rb-inline-request-form{display:flex;align-items:flex-end;gap:12px;max-width:760px}
+.rb-inline-request-form .rb-form-field{flex:1}
+.rb-form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
+.rb-form-actions-end{justify-content:flex-end}
+.rb-inline-success{color:#398566;font-size:9px;font-weight:700}
+.rb-profile-grid{max-width:1120px}
+.rb-danger-card{border-color:#f0dfe2}
+.rb-danger-card .rb-card-heading h2{color:#9c4d59}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:7px;background:#f3f5f8;color:#65758d;font-size:8px;font-weight:850;white-space:nowrap}
+.status-pill:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.status-menunggu{background:#fff6e9;color:#b77b2f}
+.status-disetujui{background:#eaf8f1;color:#438c6a}
+.status-ditolak{background:#fff0f1;color:#b95e69}
+.status-dikembalikan{background:#edf3ff;color:#5070c7}
+.status-terlambat{background:#fff0ec;color:#c26a4b}
+.auth-heading{margin-bottom:20px}
+.auth-eyebrow{display:block;margin-bottom:7px;color:#8c9bb1;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.auth-heading h1{margin:0;color:#243957;font:850 24px/1.25 Manrope,Inter,sans-serif;letter-spacing:-.7px}
+.auth-heading p{margin:8px 0 0;color:#8695aa;font-size:11px;line-height:1.75}
+.auth-nim{display:inline-flex;margin-top:12px;padding:6px 9px;border:1px solid #e6ecf7;border-radius:7px;background:#f7f9ff;color:#7184a4;font-size:8px;font-weight:800;letter-spacing:.2px}
+.auth-card .rb-form-stack{gap:14px}
+.auth-card .rb-form-field{font-size:10px}
+.auth-card .rb-form-field input{min-height:43px;font-size:11px}
+.auth-options{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.auth-checkbox{display:inline-flex;align-items:center;gap:7px;color:#71829a;font-size:10px;font-weight:600}
+.auth-checkbox input{accent-color:#4c6dcc}
+.auth-options a,.auth-switch a{color:#456bc4;font-size:10px;font-weight:800;text-decoration:none}
+.auth-options a:hover,.auth-switch a:hover{text-decoration:underline}
+.auth-submit{width:100%;min-height:43px;margin-top:2px}
+.auth-switch{margin:16px 0 0;color:#8a98ab;text-align:center;font-size:10px}
+.auth-card .auth-session-status{color:#3c8b69;font-size:10px}
+.auth-card .rb-alert{margin-bottom:12px}
+@media(max-width:900px){.rb-inline-request-form{align-items:stretch;flex-direction:column}.rb-inline-request-form .button{width:100%}}
+@media(max-width:620px){.rb-content{gap:12px}.rb-card{padding:16px}.rb-card-heading{align-items:flex-start}.rb-stat-grid,.rb-stat-grid-two{grid-template-columns:1fr 1fr;gap:9px}.rb-stat-card{padding:13px}.rb-stat-card strong{font-size:22px}.rb-stat-card small{font-size:8px}.rb-count-chip{font-size:8px}.rb-table{min-width:650px}.rb-pagination{justify-content:flex-start}.rb-profile-grid{gap:12px}.auth-heading h1{font-size:21px}.auth-card{padding:22px}}
+
+
+/* RuangBaca final consistency layer — shared typography and components. */
+.rb-content{display:grid;gap:18px;width:100%;max-width:1500px;margin:0 auto}
+.rb-card{min-width:0;padding:21px;background:#fff;border:1px solid #e8edf4;border-radius:15px;box-shadow:0 10px 28px rgba(24,45,78,.045)}
+.rb-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:17px}
+.rb-card-heading h2,.rb-modal-heading h2{margin:4px 0 5px;color:#243957;font-size:16px;font-weight:850;letter-spacing:-.35px}
+.rb-card-heading p,.rb-modal-heading p{margin:0;color:#8492a6;font-size:10px;line-height:1.7}
+.rb-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.rb-stat-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rb-stat-card{display:grid;gap:6px;min-width:0;padding:17px;background:#fff;border:1px solid #e8edf4;border-radius:13px;box-shadow:0 8px 22px rgba(24,45,78,.035)}
+.rb-stat-label{color:#8493a8;font-size:9px;font-weight:800;letter-spacing:.65px;text-transform:uppercase}
+.rb-stat-card strong{color:#1d3557;font-size:26px;font-weight:850;line-height:1.2}
+.rb-stat-card small{color:#95a1b2;font-size:9px}
+.rb-table-wrap{width:100%;overflow-x:auto}
+.rb-table{width:100%;border-collapse:separate;border-spacing:0}
+.rb-table thead th{padding:11px 13px;background:#f6f8fc;color:#8391a6;font-size:9px;font-weight:850;letter-spacing:.65px;text-align:left;text-transform:uppercase;white-space:nowrap}
+.rb-table thead th:first-child{border-radius:8px 0 0 8px}.rb-table thead th:last-child{border-radius:0 8px 8px 0}
+.rb-table tbody td{padding:13px;border-bottom:1px solid #edf1f6;color:#5d6f87;font-size:10px;vertical-align:middle}
+.rb-table tbody tr:last-child td{border-bottom:0}.rb-table tbody tr:hover td{background:#fbfcff}
+.rb-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:0}
+.rb-detail-item{min-width:0;padding:14px;border:1px solid #edf1f6;border-radius:10px;background:#fbfcfe}
+.rb-detail-item dt{margin-bottom:5px;color:#8a98ac;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.rb-detail-item dd{margin:0;color:#263d5d;font-size:12px;font-weight:750;overflow-wrap:anywhere}
+.rb-modal-content{display:grid;gap:17px;padding:24px;background:#fff;border-radius:15px}
+.rb-modal-heading{display:grid;gap:5px}
+.rb-form-actions{display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:9px;margin-top:17px}
+.rb-form-actions-end{justify-content:flex-end}
+.rb-form-field{display:grid;gap:6px;color:#526782;font-size:10px;font-weight:750}
+.rb-form-field small{color:#bd5664;font-size:9px;font-weight:500}
+.rb-alert{margin:0 0 15px;padding:12px 14px;border:1px solid;border-radius:10px;font-size:10px;line-height:1.6}
+.rb-alert-success{border-color:#d9eee2;background:#f2faf5;color:#28774f}
+.rb-alert-error{border-color:#f2dce0;background:#fff5f6;color:#a83d4b}
+.rb-alert-warning{border-color:#f6e5c8;background:#fffaf0;color:#946118}
+.rb-empty-state{display:grid;gap:4px;justify-items:center;padding:26px 12px;text-align:center;color:#8391a6;font-size:10px}
+.rb-empty-state strong{color:#324966;font-size:11px}
+.rb-empty-state span{color:#8b9aaf;font-size:9px}
+.rb-muted-text{color:#8997aa;font-size:9px}
+.rb-primary-text{color:#273f61}
+.rb-cell-subtext{display:block;margin-top:4px;color:#94a1b3;font-size:9px}
+.rb-inline-form{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rb-inline-form select{min-width:130px}
+.rb-row-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rb-count-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#eff4ff;color:#4b68b4;font-size:9px;font-weight:800;white-space:nowrap}
+.rb-role-chip{display:inline-flex;padding:5px 9px;border-radius:999px;background:#f2f5fa;color:#4e627e;font-size:9px;font-weight:750}
+.rb-pagination{display:flex;justify-content:flex-end;margin-top:14px}
+.rb-pagination nav{display:flex;align-items:center;gap:5px}
+.rb-pagination a,.rb-pagination span{font-size:10px}
+.rb-pagination svg{width:14px;height:14px}
+@media(max-width:960px){.rb-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.rb-content{gap:13px}.rb-card{padding:15px}.rb-card-heading{flex-direction:column}.rb-stat-grid,.rb-stat-grid-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rb-stat-card{padding:12px}.rb-stat-card strong{font-size:22px}.rb-detail-grid{grid-template-columns:1fr}.rb-form-actions{align-items:stretch}.rb-form-actions .button,.rb-form-actions form{flex:1}.rb-form-actions .button{width:100%}.rb-table{min-width:650px}.rb-pagination{justify-content:flex-start}}
+
+.rb-stat-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-pagination{justify-content:space-between;align-items:center;gap:12px}.catalog-pagination>div{display:flex;gap:6px}.catalog-pagination>span{color:#8997aa;font-size:9px}
+@media(max-width:960px){.rb-stat-grid-three{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.rb-stat-grid-three{grid-template-columns:1fr 1fr}.catalog-pagination{align-items:flex-start;flex-direction:column}}
+
+
+/* Standar pagination RuangBaca: label, navigasi, dan status aktif seragam. */
+.rb-pagination-nav{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.rb-pagination-summary{color:#7b8ba3;font-size:10px;font-weight:600}
+.rb-pagination-list{display:flex;align-items:center;gap:5px;list-style:none;padding:0;margin:0}
+.rb-pagination-list a,.rb-pagination-list span{min-width:31px;min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border:1px solid #e7ecf4;border-radius:8px;background:#fff;color:#667892;font-size:10px;font-weight:700;text-decoration:none}
+.rb-pagination-list a:hover{border-color:#c9d8ff;background:#f4f7ff;color:#315bd6}
+.rb-pagination-list .is-current{border-color:#dbe5ff;background:#edf2ff;color:#315bd6}
+.rb-pagination-list .is-disabled,.rb-pagination-list .is-ellipsis{color:#a4afbf;background:#f8f9fc}
+@media(max-width:620px){.rb-pagination-nav{align-items:flex-start;flex-direction:column}.rb-pagination-list{flex-wrap:wrap}}
+
+
+/* Dialog konfirmasi menggunakan sistem desain RuangBaca yang sama di semua halaman. */
+.rb-modal-open{overflow:hidden}
+.rb-modal-root{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:22px;overflow-y:auto}
+.rb-modal-backdrop{position:fixed;inset:0;width:100%;height:100%;border:0;border-radius:0;background:rgba(13,28,49,.58);backdrop-filter:blur(4px);cursor:default}
+.rb-modal-panel{position:relative;z-index:1;width:min(100%,680px);max-height:min(86vh,800px);overflow-y:auto;border:1px solid #e5ebf3;border-radius:17px;background:#fff;box-shadow:0 28px 90px rgba(9,26,51,.24)}
+.rb-modal-sm{max-width:380px}.rb-modal-md{max-width:480px}.rb-modal-lg{max-width:600px}.rb-modal-xl{max-width:720px}.rb-modal-2xl{max-width:820px}
+.rb-modal-content{display:grid;gap:17px;padding:25px;background:#fff;border-radius:17px}
+.rb-modal-heading{display:grid;gap:6px}
+.rb-modal-heading h2{margin:0;color:#243957;font-size:17px;font-weight:850;line-height:1.4;letter-spacing:-.35px}
+.rb-modal-heading p{margin:0;color:#8492a6;font-size:11px;line-height:1.7}
+@media(max-width:620px){.rb-modal-root{padding:12px}.rb-modal-content{padding:19px}.rb-modal-panel{max-height:92vh;border-radius:14px}}
+
+
+/* RuangBaca final consistency layer — shared typography and components. */
+.rb-content{display:grid;gap:18px;width:100%;max-width:1500px;margin:0 auto}
+.rb-card{min-width:0;padding:21px;background:#fff;border:1px solid #e8edf4;border-radius:15px;box-shadow:0 10px 28px rgba(24,45,78,.045)}
+.rb-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:17px}
+.rb-card-heading h2,.rb-modal-heading h2{margin:4px 0 5px;color:#243957;font-size:16px;font-weight:850;letter-spacing:-.35px}
+.rb-card-heading p,.rb-modal-heading p{margin:0;color:#8492a6;font-size:10px;line-height:1.7}
+.rb-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.rb-stat-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rb-stat-card{display:grid;gap:6px;min-width:0;padding:17px;background:#fff;border:1px solid #e8edf4;border-radius:13px;box-shadow:0 8px 22px rgba(24,45,78,.035)}
+.rb-stat-label{color:#8493a8;font-size:9px;font-weight:800;letter-spacing:.65px;text-transform:uppercase}
+.rb-stat-card strong{color:#1d3557;font-size:26px;font-weight:850;line-height:1.2}
+.rb-stat-card small{color:#95a1b2;font-size:9px}
+.rb-table-wrap{width:100%;overflow-x:auto}
+.rb-table{width:100%;border-collapse:separate;border-spacing:0}
+.rb-table thead th{padding:11px 13px;background:#f6f8fc;color:#8391a6;font-size:9px;font-weight:850;letter-spacing:.65px;text-align:left;text-transform:uppercase;white-space:nowrap}
+.rb-table thead th:first-child{border-radius:8px 0 0 8px}.rb-table thead th:last-child{border-radius:0 8px 8px 0}
+.rb-table tbody td{padding:13px;border-bottom:1px solid #edf1f6;color:#5d6f87;font-size:10px;vertical-align:middle}
+.rb-table tbody tr:last-child td{border-bottom:0}.rb-table tbody tr:hover td{background:#fbfcff}
+.rb-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:0}
+.rb-detail-item{min-width:0;padding:14px;border:1px solid #edf1f6;border-radius:10px;background:#fbfcfe}
+.rb-detail-item dt{margin-bottom:5px;color:#8a98ac;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.rb-detail-item dd{margin:0;color:#263d5d;font-size:12px;font-weight:750;overflow-wrap:anywhere}
+.rb-modal-content{display:grid;gap:17px;padding:24px;background:#fff;border-radius:15px}
+.rb-modal-heading{display:grid;gap:5px}
+.rb-form-actions{display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:9px;margin-top:17px}
+.rb-form-actions-end{justify-content:flex-end}
+.rb-form-field{display:grid;gap:6px;color:#526782;font-size:10px;font-weight:750}
+.rb-form-field small{color:#bd5664;font-size:9px;font-weight:500}
+.rb-alert{margin:0 0 15px;padding:12px 14px;border:1px solid;border-radius:10px;font-size:10px;line-height:1.6}
+.rb-alert-success{border-color:#d9eee2;background:#f2faf5;color:#28774f}
+.rb-alert-error{border-color:#f2dce0;background:#fff5f6;color:#a83d4b}
+.rb-alert-warning{border-color:#f6e5c8;background:#fffaf0;color:#946118}
+.rb-empty-state{display:grid;gap:4px;justify-items:center;padding:26px 12px;text-align:center;color:#8391a6;font-size:10px}
+.rb-empty-state strong{color:#324966;font-size:11px}
+.rb-empty-state span{color:#8b9aaf;font-size:9px}
+.rb-muted-text{color:#8997aa;font-size:9px}
+.rb-primary-text{color:#273f61}
+.rb-cell-subtext{display:block;margin-top:4px;color:#94a1b3;font-size:9px}
+.rb-inline-form{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rb-inline-form select{min-width:130px}
+.rb-row-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rb-count-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#eff4ff;color:#4b68b4;font-size:9px;font-weight:800;white-space:nowrap}
+.rb-role-chip{display:inline-flex;padding:5px 9px;border-radius:999px;background:#f2f5fa;color:#4e627e;font-size:9px;font-weight:750}
+.rb-pagination{display:flex;justify-content:flex-end;margin-top:14px}
+.rb-pagination nav{display:flex;align-items:center;gap:5px}
+.rb-pagination a,.rb-pagination span{font-size:10px}
+.rb-pagination svg{width:14px;height:14px}
+@media(max-width:960px){.rb-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.rb-content{gap:13px}.rb-card{padding:15px}.rb-card-heading{flex-direction:column}.rb-stat-grid,.rb-stat-grid-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rb-stat-card{padding:12px}.rb-stat-card strong{font-size:22px}.rb-detail-grid{grid-template-columns:1fr}.rb-form-actions{align-items:stretch}.rb-form-actions .button,.rb-form-actions form{flex:1}.rb-form-actions .button{width:100%}.rb-table{min-width:650px}.rb-pagination{justify-content:flex-start}}

@@ -7,22 +7,18 @@ use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    /** Register any application services. */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    /** Bootstrap any application services. */
     public function boot(): void
     {
-        // Modul 6: hanya Admin dan Petugas boleh mengelola data buku.
+        // Modul 6: hanya Administrator dan Petugas boleh mengelola data buku.
         Gate::define('kelola-buku', function ($user): bool {
-        return $user->hasRole(['admin', 'petugas']);
+            return $user->hasRole(['admin', 'petugas']);
         });
     }
 }

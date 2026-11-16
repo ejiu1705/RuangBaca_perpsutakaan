@@ -59,17 +59,17 @@
         try {
             response = await fetch(url, { ...options, headers, credentials: 'same-origin' });
         } catch {
-            throw new Error('API tidak dapat diakses. Periksa server Laravel dan koneksi internet.');
+            throw new Error('Layanan data tidak dapat diakses. Periksa server Laravel dan koneksi internet.');
         }
 
         if (response.status === 204) return null;
         const result = await response.json().catch(() => ({}));
         if (!response.ok) {
-            if (response.status === 419) throw new Error('Sesi keamanan kedaluwarsa. Muat ulang halaman lalu coba kembali.');
+            if (response.status === 419) throw new Error('Sesi Anda telah berakhir. Muat ulang halaman, lalu coba kembali.');
             if (response.status === 422 && result.errors) {
                 throw new Error(Object.values(result.errors).flat().join(' ') || 'Periksa kembali data yang dimasukkan.');
             }
-            if (response.status === 401) throw new Error('Sesi login berakhir. Silakan login kembali.');
+            if (response.status === 401) throw new Error('Sesi Anda telah berakhir. Silakan masuk kembali.');
             if (response.status === 403) throw new Error('Akun Anda tidak memiliki izin untuk melakukan tindakan ini.');
             if (response.status === 404) throw new Error(result.message || 'Data buku tidak ditemukan.');
             throw new Error(result.message || `Permintaan gagal (HTTP ${response.status}).`);
@@ -83,7 +83,7 @@
         if (elements.categoryMessage) elements.categoryMessage.textContent = '';
         if (elements.saveCategoryButton) {
             elements.saveCategoryButton.disabled = false;
-            elements.saveCategoryButton.textContent = 'Tambahkan';
+            elements.saveCategoryButton.textContent = 'Simpan Kategori';
         }
     }
 
@@ -91,14 +91,14 @@
         if (!elements.form) return;
         elements.form.reset();
         $('buku-id').value = '';
-        $('judul-form').textContent = 'Tambah Buku Baru';
+        $('judul-form').textContent = 'Tambah Buku';
         $('btn-simpan').textContent = 'Simpan Buku';
         $('btn-batal').hidden = true;
         $('btn-simpan').disabled = false;
         resetCategoryPanel();
     }
 
-    function addCategoryOption(select, id, name, placeholderLabel) {
+    function addCategoryOption(select, id, name) {
         if (!select) return;
         const exists = Array.from(select.options).some((option) => option.value === String(id));
         if (exists) return;
@@ -137,7 +137,7 @@
 
             const kategori = result?.data;
             if (!kategori?.id || !kategori?.nama) {
-                throw new Error('Kategori berhasil diproses, tetapi data balasan server tidak lengkap. Muat ulang halaman.');
+                throw new Error('Kategori telah diproses, tetapi data dari server belum lengkap. Muat ulang halaman.');
             }
 
             addCategoryOption(elements.categorySelect, kategori.id, kategori.nama);
@@ -158,14 +158,14 @@
                 elements.categoryMessage.className = 'inline-category-message error';
             }
             button.disabled = false;
-            button.textContent = 'Tambahkan';
+            button.textContent = 'Simpan Kategori';
         }
     }
 
     function renderTable(data) {
         daftarBuku = Array.isArray(data) ? data : [];
         const emptyMessage = currentSearch || currentCategory
-            ? 'Tidak ada buku yang sesuai dengan filter.'
+            ? 'Tidak ada buku yang sesuai dengan pencarian atau filter.'
             : 'Belum ada data buku.';
 
         if (!daftarBuku.length) {
@@ -211,14 +211,14 @@
             renderTable(result.data ?? []);
             if (elements.pageInfo) {
                 const total = result.meta?.total ?? daftarBuku.length;
-                elements.pageInfo.textContent = `Menampilkan ${daftarBuku.length} data • Halaman ${currentPage} dari ${lastPage} • Total ${total} buku`;
+                elements.pageInfo.textContent = `Menampilkan ${new Intl.NumberFormat('id-ID').format(daftarBuku.length)} dari ${new Intl.NumberFormat('id-ID').format(total)} buku • Halaman ${currentPage} dari ${lastPage}`;
             }
             if (elements.previous) elements.previous.disabled = currentPage <= 1;
             if (elements.next) elements.next.disabled = currentPage >= lastPage;
         } catch (error) {
-            elements.table.innerHTML = `<tr><td colspan="${canManageBooks ? 6 : 5}" class="table-empty">Data gagal dimuat. Silakan coba muat ulang.</td></tr>`;
+            elements.table.innerHTML = `<tr><td colspan="${canManageBooks ? 6 : 5}" class="table-empty">Data buku gagal dimuat. Silakan muat ulang halaman.</td></tr>`;
             tampilPesan(error.message, 'error');
-            if (elements.pageInfo) elements.pageInfo.textContent = 'Data belum tersedia';
+            if (elements.pageInfo) elements.pageInfo.textContent = 'Data belum tersedia.';
             if (elements.previous) elements.previous.disabled = true;
             if (elements.next) elements.next.disabled = true;
         }
@@ -262,7 +262,7 @@
                     method: id ? 'PUT' : 'POST',
                     body: JSON.stringify(payload),
                 });
-                tampilPesan(id ? 'Perubahan informasi buku berhasil disimpan.' : 'Buku baru berhasil ditambahkan ke katalog.');
+                tampilPesan(id ? 'Perubahan buku berhasil disimpan.' : 'Buku berhasil ditambahkan ke katalog.');
                 resetForm();
                 await muatBuku(id ? currentPage : 1);
             } catch (error) {
@@ -289,7 +289,7 @@
             $('judul').value = buku.judul ?? '';
             $('penulis').value = buku.penulis ?? '';
             $('tahun_terbit').value = buku.tahun ?? '';
-            $('judul-form').textContent = `Ubah Informasi Buku #${id}`;
+            $('judul-form').textContent = `Ubah Buku #${id}`;
             $('btn-simpan').textContent = 'Simpan Perubahan';
             $('btn-batal').hidden = false;
             $('panel-form-buku')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -300,14 +300,14 @@
             const form = event.target instanceof Element ? event.target.closest('form[data-delete-book-form]') : null;
             if (!form) return;
             const title = form.dataset.title || 'buku ini';
-            if (!window.confirm(`Hapus buku "${title}" dari katalog? Tindakan ini tidak dapat dibatalkan.`)) {
+            if (!window.confirm(`Apakah Anda yakin ingin menghapus buku "${title}" dari katalog? Tindakan ini tidak dapat dibatalkan.`)) {
                 event.preventDefault();
             }
         });
 
         $('btn-batal')?.addEventListener('click', () => {
             resetForm();
-            tampilPesan('Mode edit dibatalkan. Formulir siap digunakan untuk menambah buku baru.');
+            tampilPesan('Perubahan dibatalkan. Formulir siap digunakan untuk menambahkan buku baru.');
         });
     }
 

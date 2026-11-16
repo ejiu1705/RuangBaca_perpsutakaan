@@ -10,11 +10,11 @@ class PeminjamanSecurityController extends Controller
 {
     /** Detail peminjaman dengan pemeriksaan Policy untuk mencegah IDOR. */
     public function show(string $id)
-{
-    $peminjaman = Peminjaman::with(['anggota', 'buku'])->findOrFail($id);
+    {
+        $peminjaman = Peminjaman::with(['anggota', 'buku', 'user'])->findOrFail($id);
 
-    Gate::authorize('view', $peminjaman);
+        Gate::authorize('view', $peminjaman);
 
-    return view('modul6.peminjaman.show', compact('peminjaman'));
-}
+        return view('modul6.peminjaman.show', compact('peminjaman'));
+    }
 }

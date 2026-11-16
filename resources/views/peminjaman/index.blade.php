@@ -1,43 +1,34 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pengelolaan Peminjaman dan Pengembalian</h2>
-    </x-slot>
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                @if (session('status')) <p class="mb-4 text-green-700">{{ session('status') }}</p> @endif
-                @if ($errors->any()) <p class="mb-4 text-red-700">{{ $errors->first() }}</p> @endif
-                <div class="overflow-x-auto">
-                    <table class="min-w-full text-sm">
-                        <thead><tr class="border-b text-left"><th class="p-3">Anggota</th><th class="p-3">Buku</th><th class="p-3">Tanggal Pinjam</th><th class="p-3">Tanggal Kembali</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead>
-                        <tbody>
-                        @forelse ($peminjamans as $item)
-                            <tr class="border-b">
-                                <td class="p-3">{{ $item->anggota?->nama ?? $item->user?->name ?? '-' }}</td>
-                                <td class="p-3">{{ $item->buku?->judul ?? '-' }}</td>
-                                <td class="p-3">{{ $item->tanggal_pinjam?->format('d-m-Y') ?? '-' }}</td>
-                                <td class="p-3">{{ $item->tanggal_kembali?->format('d-m-Y') ?? '-' }}</td>
-                                <td class="p-3">{{ ucfirst($item->status ?? 'menunggu') }}</td>
-                                <td class="p-3">
-                                    <div class="flex flex-wrap gap-2">
-                                        @if (($item->status ?? 'menunggu') === 'menunggu' && auth()->user()->can('memproses persetujuan peminjaman'))
-                                            <form method="POST" action="{{ route('peminjaman.approve', $item) }}">@csrf<button class="rounded bg-green-600 px-3 py-2 text-white">Setujui</button></form>
-                                            <form method="POST" action="{{ route('peminjaman.reject', $item) }}">@csrf<button class="rounded bg-red-600 px-3 py-2 text-white">Tolak</button></form>
-                                        @endif
-                                        @if (($item->status ?? '') === 'disetujui' && auth()->user()->can('mencatat pengembalian buku'))
-                                            <form method="POST" action="{{ route('peminjaman.return', $item) }}">@csrf<button class="rounded bg-blue-600 px-3 py-2 text-white">Catat Pengembalian</button></form>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr><td colspan="6" class="p-3">Belum ada data peminjaman.</td></tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4">{{ $peminjamans->links() }}</div>
-            </div>
-        </div>
+    <x-slot name="header"><x-page-heading eyebrow="SIRKULASI / TRANSAKSI" title="Pengelolaan Peminjaman" description="Periksa Pengajuan, berikan keputusan, dan catat pengembalian buku." /></x-slot>
+    <div class="rb-content">
+        <section class="rb-card">
+            <div class="rb-card-heading"><div><span class="eyebrow">DATA SIRKULASI</span><h2>Daftar Transaksi Peminjaman</h2><p>Gunakan kolom tindakan untuk memproses pengajuan dan pengembalian.</p></div><span class="rb-count-chip">{{ number_format($peminjamans->total(), 0, ',', '.') }} transaksi</span></div>
+            <div class="rb-table-wrap"><table class="rb-table"><thead><tr><th>Peminjam</th><th>Judul Buku</th><th>Tanggal Peminjaman</th><th>Tanggal Pengembalian</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>
+                @forelse ($peminjamans as $item)
+                    <tr>
+                        <td><strong class="rb-primary-text">{{ $item->anggota?->nama ?? $item->user?->name ?? 'Peminjam tidak tersedia' }}</strong><small class="rb-cell-subtext">{{ $item->user?->email ?? $item->anggota?->email ?? 'Alamat email tidak tersedia' }}</small></td>
+                        <td>{{ $item->buku?->judul ?? 'Buku tidak tersedia' }}</td>
+                        <td>{{ $item->tanggal_pinjam?->translatedFormat('d F Y') ?? 'Belum dicatat' }}</td>
+                        <td>{{ $item->tanggal_kembali?->translatedFormat('d F Y') ?? 'Belum dikembalikan' }}</td>
+                        <td><x-status-badge :status="$item->status ?? 'menunggu'" /></td>
+                        <td><div class="rb-row-actions">
+                            @if (($item->status ?? 'menunggu') === 'menunggu' && auth()->user()->can('memproses persetujuan peminjaman'))
+                                <form method="POST" action="{{ route('peminjaman.approve', $item) }}">@csrf<button class="button small" type="submit">Setujui</button></form>
+                                <form method="POST" action="{{ route('peminjaman.reject', $item) }}" onsubmit="return confirm('Apakah Anda yakin ingin menolak pengajuan peminjaman ini?')">@csrf<button class="button danger small" type="submit">Tolak</button></form>
+                            @endif
+                            @if (($item->status ?? '') === 'disetujui' && auth()->user()->can('mencatat pengembalian buku'))
+                                <form method="POST" action="{{ route('peminjaman.return', $item) }}" onsubmit="return confirm('Apakah Anda yakin ingin mencatat bahwa buku ini telah dikembalikan?')">@csrf<button class="button secondary small" type="submit">Catat Pengembalian</button></form>
+                            @endif
+                            @if (($item->status ?? '') !== 'menunggu' && ($item->status ?? '') !== 'disetujui')
+                                <span class="rb-muted-text">Tidak ada tindakan</span>
+                            @endif
+                        </div></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6"><div class="rb-empty-state"><strong>Belum ada transaksi peminjaman.</strong><span>Pengajuan peminjaman yang masuk akan muncul di sini.</span></div></td></tr>
+                @endforelse
+            </tbody></table></div>
+            <div class="rb-pagination">{{ $peminjamans->links() }}</div>
+        </section>
     </div>
 </x-app-layout>

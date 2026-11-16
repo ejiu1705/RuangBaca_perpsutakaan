@@ -1,48 +1,36 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Riwayat Peminjaman Saya</h2>
-    </x-slot>
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-            @if (session('status')) <div class="bg-green-50 p-4 rounded text-green-800">{{ session('status') }}</div> @endif
-            @if ($errors->any()) <div class="bg-red-50 p-4 rounded text-red-700">{{ $errors->first() }}</div> @endif
+    <x-slot name="header"><x-page-heading eyebrow="SIRKULASI / RIWAYAT" title="Riwayat Peminjaman" description="Lihat status pengajuan dan daftar buku yang Anda pinjam." /></x-slot>
+    <div class="rb-content">
 
-            @can('mengajukan peminjaman buku')
-                <div class="bg-white p-6 shadow-sm sm:rounded-lg">
-                    <h3 class="font-semibold mb-4">Ajukan Peminjaman Buku</h3>
-                    <form method="POST" action="{{ route('peminjaman.store') }}" class="flex flex-col sm:flex-row gap-3">
-                        @csrf
-                        <select name="buku_id" required class="flex-1 rounded-md border-gray-300">
-                            <option value="">-- Pilih buku --</option>
+        @can('mengajukan peminjaman buku')
+            <section class="rb-card">
+                <div class="rb-card-heading"><div><span class="eyebrow">PENGAJUAN BARU</span><h2>Ajukan Peminjaman Buku</h2><p>Pilih buku dari katalog untuk mengirim pengajuan kepada petugas.</p></div></div>
+                <form method="POST" action="{{ route('peminjaman.store') }}" class="rb-inline-request-form">
+                    @csrf
+                    <label class="rb-form-field" for="buku_id"><span>Pilih Buku</span>
+                        <select id="buku_id" name="buku_id" required>
+                            <option value="">Pilih judul buku</option>
                             @foreach ($buku as $item)
                                 <option value="{{ $item->id }}" @selected(old('buku_id') == $item->id)>{{ $item->judul }}</option>
                             @endforeach
                         </select>
-                        <button class="rounded bg-blue-600 px-4 py-2 text-white">Ajukan Peminjaman</button>
-                    </form>
-                </div>
-            @endcan
+                        <small>{{ $errors->first("buku_id") }}</small>
+                    </label>
+                    <button class="button" type="submit">Kirim Pengajuan</button>
+                </form>
+            </section>
+        @endcan
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg overflow-x-auto">
-                <p class="mb-4 text-gray-600">Data berikut dibatasi berdasarkan akun yang sedang login.</p>
-                <table class="min-w-full text-sm">
-                    <thead><tr class="border-b text-left"><th class="p-3">ID</th><th class="p-3">Buku</th><th class="p-3">Tanggal Pinjam</th><th class="p-3">Tanggal Kembali</th><th class="p-3">Status</th></tr></thead>
-                    <tbody>
-                    @forelse ($peminjamans as $item)
-                        <tr class="border-b">
-                            <td class="p-3">{{ $item->id }}</td>
-                            <td class="p-3">{{ $item->buku?->judul ?? '-' }}</td>
-                            <td class="p-3">{{ $item->tanggal_pinjam?->format('d-m-Y') ?? '-' }}</td>
-                            <td class="p-3">{{ $item->tanggal_kembali?->format('d-m-Y') ?? '-' }}</td>
-                            <td class="p-3">{{ ucfirst($item->status ?? 'menunggu') }}</td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="5" class="p-3">Belum ada riwayat peminjaman.</td></tr>
-                    @endforelse
-                    </tbody>
-                </table>
-                <div class="mt-4">{{ $peminjamans->links() }}</div>
-            </div>
-        </div>
+        <section class="rb-card">
+            <div class="rb-card-heading"><div><span class="eyebrow">RIWAYAT AKUN</span><h2>Daftar Peminjaman Saya</h2><p>Data yang ditampilkan hanya berasal dari akun yang sedang masuk.</p></div><span class="rb-count-chip">{{ number_format($peminjamans->total(), 0, ',', '.') }} transaksi</span></div>
+            <div class="rb-table-wrap"><table class="rb-table"><thead><tr><th>ID</th><th>Judul Buku</th><th>Tanggal Peminjaman</th><th>Tanggal Pengembalian</th><th>Status</th></tr></thead><tbody>
+                @forelse ($peminjamans as $item)
+                    <tr><td>#{{ $item->id }}</td><td><strong class="rb-primary-text">{{ $item->buku?->judul ?? 'Buku tidak tersedia' }}</strong></td><td>{{ $item->tanggal_pinjam?->translatedFormat('d F Y') ?? 'Belum dicatat' }}</td><td>{{ $item->tanggal_kembali?->translatedFormat('d F Y') ?? 'Belum dikembalikan' }}</td><td><x-status-badge :status="$item->status ?? 'menunggu'" /></td></tr>
+                @empty
+                    <tr><td colspan="5"><div class="rb-empty-state"><strong>Belum ada riwayat peminjaman.</strong><span>Ajukan peminjaman melalui katalog untuk memulai.</span><a href="{{ route('buku.index') }}" class="button small">Buka Katalog Buku</a></div></td></tr>
+                @endforelse
+            </tbody></table></div>
+            <div class="rb-pagination">{{ $peminjamans->links() }}</div>
+        </section>
     </div>
 </x-app-layout>

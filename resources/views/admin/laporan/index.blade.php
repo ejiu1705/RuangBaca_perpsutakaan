@@ -1,27 +1,20 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Laporan Perpustakaan</h2>
-    </x-slot>
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-            <div class="grid gap-4 md:grid-cols-2">
-                <div class="bg-white p-6 shadow-sm sm:rounded-lg"><div class="text-gray-500">Total Buku</div><div class="text-3xl font-bold">{{ $totalBuku }}</div></div>
-                <div class="bg-white p-6 shadow-sm sm:rounded-lg"><div class="text-gray-500">Total Kategori</div><div class="text-3xl font-bold">{{ $totalKategori }}</div></div>
-            </div>
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg overflow-x-auto">
-                <h3 class="font-semibold mb-4">Rekap Buku dan Jumlah Peminjaman</h3>
-                <table class="min-w-full text-sm">
-                    <thead><tr class="border-b text-left"><th class="p-3">Judul</th><th class="p-3">Kategori</th><th class="p-3">Penulis</th><th class="p-3">Jumlah Peminjaman</th></tr></thead>
-                    <tbody>
-                    @forelse ($buku as $item)
-                        <tr class="border-b"><td class="p-3">{{ $item->judul }}</td><td class="p-3">{{ $item->kategori?->nama ?? '-' }}</td><td class="p-3">{{ $item->penulis }}</td><td class="p-3">{{ $item->peminjamans_count }}</td></tr>
-                    @empty
-                        <tr><td colspan="4" class="p-3">Belum ada data buku.</td></tr>
-                    @endforelse
-                    </tbody>
-                </table>
-                <div class="mt-4">{{ $buku->links() }}</div>
-            </div>
-        </div>
+    <x-slot name="header"><x-page-heading eyebrow="ADMINISTRASI / LAPORAN" title="Laporan Perpustakaan" description="Ringkasan koleksi buku dan aktivitas peminjaman yang tercatat." /></x-slot>
+    <div class="rb-content">
+        <section class="rb-stat-grid rb-stat-grid-two">
+            <article class="rb-stat-card"><span class="rb-stat-label">Total Buku</span><strong>{{ number_format($totalBuku, 0, ',', '.') }}</strong><small>Judul buku yang tercatat di katalog</small></article>
+            <article class="rb-stat-card"><span class="rb-stat-label">Total Kategori</span><strong>{{ number_format($totalKategori, 0, ',', '.') }}</strong><small>Kelompok koleksi yang tersedia</small></article>
+        </section>
+        <section class="rb-card">
+            <div class="rb-card-heading"><div><span class="eyebrow">REKAPITULASI KOLEKSI</span><h2>Rekap Buku dan Peminjaman</h2><p>Jumlah peminjaman dihitung dari seluruh transaksi untuk setiap buku.</p></div><span class="rb-count-chip">{{ number_format($buku->total(), 0, ',', '.') }} buku</span></div>
+            <div class="rb-table-wrap"><table class="rb-table"><thead><tr><th>Judul Buku</th><th>Kategori</th><th>Penulis</th><th>Jumlah Peminjaman</th></tr></thead><tbody>
+                @forelse ($buku as $item)
+                    <tr><td><strong class="rb-primary-text">{{ $item->judul }}</strong></td><td>{{ $item->kategori?->nama ?? 'Tanpa Kategori' }}</td><td>{{ $item->penulis }}</td><td><span class="rb-count-chip">{{ number_format($item->peminjamans_count, 0, ',', '.') }} kali</span></td></tr>
+                @empty
+                    <tr><td colspan="4"><div class="rb-empty-state"><strong>Belum ada data buku.</strong><span>Data koleksi akan ditampilkan setelah buku ditambahkan.</span></div></td></tr>
+                @endforelse
+            </tbody></table></div>
+            <div class="rb-pagination">{{ $buku->links() }}</div>
+        </section>
     </div>
 </x-app-layout>

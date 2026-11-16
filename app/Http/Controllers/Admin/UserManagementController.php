@@ -27,12 +27,12 @@ class UserManagementController extends Controller
 
         if ($user->is(auth()->user()) && $validated['role'] !== 'admin') {
             return back()->withErrors([
-                'role' => 'Admin tidak dapat menurunkan role akun yang sedang digunakan.',
+                'role' => 'Administrator tidak dapat menurunkan peran akun yang sedang digunakan.',
             ]);
         }
 
         $user->syncRoles([$validated['role']]);
 
-        return back()->with('status', 'Role pengguna berhasil diperbarui.');
+        return back()->with('status', 'Peran pengguna berhasil diperbarui.');
     }
 }

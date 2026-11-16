@@ -1,29 +1,8 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
+    <x-slot name="header"><x-page-heading eyebrow="PENGATURAN AKUN" title="Profil Saya" description="Perbarui informasi akun dan atur keamanan kata sandi Anda." /></x-slot>
+    <div class="rb-content rb-profile-grid">
+        <section class="rb-card">@include('profile.partials.update-profile-information-form')</section>
+        <section class="rb-card">@include('profile.partials.update-password-form')</section>
+        <section class="rb-card rb-danger-card">@include('profile.partials.delete-user-form')</section>
     </div>
 </x-app-layout>

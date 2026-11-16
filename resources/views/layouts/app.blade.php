@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name', 'Perpustakaan Digital'))</title>
+    <title>@yield('title', 'RuangBaca · Perpustakaan Digital')</title>
     <meta name="theme-color" content="#f5f7fb">
-    @vite(['resources/css/app.css'])
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=20261116-contrast">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body class="app-body">
@@ -15,10 +14,10 @@
     @isset($header)
         <div class="app-page-head"><div class="app-page-head-inner">{{ $header }}</div></div>
     @endisset
-    <main class="app-main">{{ $slot }}</main>
-    <footer class="app-footer"><span><strong>RuangBaca</strong> · Perpustakaan Digital</span><span>© {{ date('Y') }} Sistem Informasi Perpustakaan</span></footer>
+    <main class="app-main"><x-flash-messages />{{ $slot }}</main>
+    <footer class="app-footer"><span><strong>RuangBaca</strong> · Perpustakaan Digital</span><span>© {{ date('Y') }} RuangBaca. Seluruh hak cipta dilindungi.</span></footer>
     </div>
 </div>
-<script defer src="{{ asset('js/alpine.min.js') }}"></script>
+@stack('scripts')
 </body>
 </html>
