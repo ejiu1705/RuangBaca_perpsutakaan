@@ -1,0 +1,52 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BukuController; // Sesuaikan namespace bila berbeda.
+use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Siswa\RiwayatPeminjamanController;
+
+// Beranda Modul 1 tetap tersedia.
+Route::get('/', [BukuController::class, 'home'])->name('home');
+
+Route::middleware('auth')->group(function () {
+    // Ganti route dashboard bawaan Breeze ini jika sudah ada, jangan duplikasi nama.
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) return redirect()->route('admin.dashboard');
+        if ($user->hasRole('petugas')) return redirect()->route('petugas.dashboard');
+        return redirect()->route('buku.index');
+    })->name('dashboard');
+
+    // Pertahankan URL dan named route Modul 1, tambahkan middleware.
+    Route::get('/buku', [BukuController::class, 'index'])
+        ->middleware('permission:lihat daftar buku')->name('buku.index');
+    Route::get('/buku/{id}', [BukuController::class, 'show'])
+        ->middleware('permission:lihat daftar buku')->name('buku.show');
+
+    Route::get('/peminjaman/riwayat', [RiwayatPeminjamanController::class, 'index'])
+        ->middleware('permission:melihat riwayat peminjaman sendiri')->name('peminjaman.riwayat');
+});
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', fn () => view('admin.dashboard'))
+        ->middleware('permission:akses dashboard admin')->name('dashboard');
+    Route::get('/users', [UserManagementController::class, 'index'])
+        ->middleware('permission:kelola data pengguna')->name('users.index');
+    Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])
+        ->middleware('permission:kelola role pengguna')->name('users.role.update');
+});
+
+Route::prefix('petugas')->name('petugas.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', fn () => view('petugas.dashboard'))
+        ->middleware('permission:akses dashboard petugas')->name('dashboard');
+});
+
+Route::get('/laporan', [LaporanController::class, 'index'])
+    ->middleware(['auth', 'permission:lihat laporan perpustakaan'])
+    ->name('laporan.index');
+
+// PENTING: untuk CRUD web buku yang sudah ada, tambahkan
+// ->middleware(['auth', 'permission:kelola data buku']) pada route create/store/edit/update/destroy.
+// Tambahkan permission sesuai fungsi pada route peminjaman/pengembalian yang sudah ada.
+// Tambahkan middleware permission profil ke route profile Breeze yang sudah ada.

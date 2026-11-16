@@ -1,0 +1,26 @@
+{{-- Gabungkan ke navbar Breeze atau navbar yang sudah dipakai project. --}}
+@can('lihat daftar buku')
+    <a href="{{ route('buku.index') }}">Daftar Buku</a>
+@endcan
+
+@role('admin')
+    <a href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+@endrole
+
+@role('petugas')
+    <a href="{{ route('petugas.dashboard') }}">Dashboard Petugas</a>
+@endrole
+
+@can('kelola data pengguna')
+    <a href="{{ route('admin.users.index') }}">Kelola Pengguna</a>
+@endcan
+
+@can('lihat laporan perpustakaan')
+    <a href="{{ route('laporan.index') }}">Laporan</a>
+@endcan
+
+@can('melihat riwayat peminjaman sendiri')
+    <a href="{{ route('peminjaman.riwayat') }}">Riwayat Peminjaman</a>
+@endcan
+
+{{-- Bungkus tombol tambah/ubah/hapus buku dengan @can('kelola data buku'). --}}

@@ -1,0 +1,5 @@
+// Di app/Http/Controllers/Auth/RegisteredUserController.php,
+// setelah User::create(...) berhasil, tambahkan:
+$user->assignRole('siswa');
+
+// Jangan menerima role dari input registrasi. Breeze sudah meng-hash password.

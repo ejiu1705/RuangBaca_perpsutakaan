@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\BukuController;
+use App\Http\Controllers\Api\RekapController;
+
+// Pertahankan route login/token Modul 4 yang sudah ada.
+// Lindungi endpoint API dengan Sanctum dan permission Spatie.
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/buku', [BukuController::class, 'index'])
+        ->middleware('permission:lihat daftar buku');
+
+    Route::get('/buku/{id}', [BukuController::class, 'show'])
+        ->middleware('permission:lihat daftar buku');
+
+    Route::post('/buku', [BukuController::class, 'store'])
+        ->middleware('permission:kelola data buku');
+
+    Route::match(['put', 'patch'], '/buku/{id}', [BukuController::class, 'update'])
+        ->middleware('permission:kelola data buku');
+
+    Route::delete('/buku/{id}', [BukuController::class, 'destroy'])
+        ->middleware('permission:kelola data buku');
+
+    // Laporan hanya untuk Admin dan Petugas.
+    Route::get('/rekap/buku-per-kategori', [RekapController::class, 'bukuPerKategori'])
+        ->middleware('permission:lihat laporan perpustakaan');
+
+    Route::get('/rekap/peminjaman-per-buku', [RekapController::class, 'peminjamanPerBuku'])
+        ->middleware('permission:lihat laporan perpustakaan');
+});

@@ -1,0 +1,14 @@
+// Gabungkan ke app/Models/Peminjaman.php jika model tersebut sudah ada.
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
+
+public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+}
+
+// Saat membuat peminjaman di controller, ikat ke akun yang login:
+// $peminjaman = new Peminjaman();
+// $peminjaman->fill($request->validated()); // field lain sesuai schema proyek
+// $peminjaman->user_id = auth()->id();
+// $peminjaman->save();

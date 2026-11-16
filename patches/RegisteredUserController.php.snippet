@@ -1,0 +1,16 @@
+// Di app/Http/Controllers/Auth/RegisteredUserController.php,
+// setelah User::create(...) dan sebelum event(new Registered($user)) tambahkan:
+
+$user->assignRole('siswa');
+
+// Contoh bagian penting:
+$user = User::create([
+    'name' => $request->name,
+    'email' => $request->email,
+    'password' => Hash::make($request->password),
+]);
+
+// Semua akun baru otomatis menjadi siswa.
+// Jangan mengambil role dari $request, karena pengguna tidak boleh memilih
+// atau menaikkan role sendiri melalui form registrasi.
+$user->assignRole('siswa');

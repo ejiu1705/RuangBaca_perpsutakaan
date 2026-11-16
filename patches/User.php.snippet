@@ -1,0 +1,12 @@
+// Gabungkan ke app/Models/User.php (jangan hapus trait atau relasi yang sudah ada).
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Peminjaman;
+
+// Di dalam class User:
+use HasRoles;
+
+public function peminjamans(): HasMany
+{
+    return $this->hasMany(Peminjaman::class);
+}

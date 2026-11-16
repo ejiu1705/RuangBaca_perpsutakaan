@@ -1,0 +1,77 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BukuController;
+use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Siswa\RiwayatPeminjamanController;
+
+// Pertahankan route home Modul 1.
+Route::get('/', [BukuController::class, 'home'])->name('home');
+
+Route::middleware('auth')->group(function () {
+    // Arahkan pengguna ke halaman sesuai role setelah login.
+    Route::get('/dashboard', function () {
+        $user = request()->user();
+
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->hasRole('petugas')) {
+            return redirect()->route('petugas.dashboard');
+        }
+
+        return redirect()->route('buku.index');
+    })->name('dashboard');
+
+    // Route Modul 1 tetap memakai URL dan nama route yang sama.
+    Route::get('/buku', [BukuController::class, 'index'])
+        ->middleware('permission:lihat daftar buku')
+        ->name('buku.index');
+
+    Route::get('/buku/{id}', [BukuController::class, 'show'])
+        ->middleware('permission:lihat daftar buku')
+        ->name('buku.show');
+
+    Route::get('/peminjaman/riwayat', [RiwayatPeminjamanController::class, 'index'])
+        ->middleware('permission:melihat riwayat peminjaman sendiri')
+        ->name('peminjaman.riwayat');
+
+    // Tambahkan middleware pada route profil Breeze yang sudah dibuat:
+    // GET /profile     -> permission:lihat profil sendiri
+    // PATCH /profile   -> permission:ubah profil sendiri
+    // Contoh: ->middleware('permission:lihat profil sendiri')
+});
+
+Route::middleware(['auth', 'permission:akses dashboard admin'])
+    ->prefix('admin')->name('admin.')
+    ->group(function () {
+        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+    });
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/users', [UserManagementController::class, 'index'])
+        ->middleware('permission:kelola data pengguna')
+        ->name('users.index');
+
+    Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])
+        ->middleware('permission:kelola role pengguna')
+        ->name('users.role.update');
+});
+
+Route::middleware(['auth', 'permission:akses dashboard petugas'])
+    ->prefix('petugas')->name('petugas.')
+    ->group(function () {
+        Route::view('/dashboard', 'petugas.dashboard')->name('dashboard');
+    });
+
+Route::get('/laporan', [LaporanController::class, 'index'])
+    ->middleware(['auth', 'permission:lihat laporan perpustakaan'])
+    ->name('laporan.index');
+
+// Untuk route peminjaman/persetujuan/pengembalian yang sudah ada di proyek,
+// tambahkan middleware berikut sesuai method yang dipakai:
+// - membuat pengajuan: auth + permission:mengajukan peminjaman buku
+// - menyetujui: auth + permission:memproses persetujuan peminjaman
+// - mencatat pengembalian: auth + permission:mencatat pengembalian buku

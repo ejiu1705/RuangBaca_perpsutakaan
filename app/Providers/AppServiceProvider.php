@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        // Modul 6: hanya Admin dan Petugas boleh mengelola data buku.
+        Gate::define('kelola-buku', function ($user): bool {
+        return $user->hasRole(['admin', 'petugas']);
+        });
+    }
+}

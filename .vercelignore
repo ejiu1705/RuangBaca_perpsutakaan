@@ -1,0 +1,15 @@
+# Secret environment files must never be uploaded.
+.env
+.env.*
+!.env.example
+
+# Reinstalled during the Vercel build.
+/vendor
+/node_modules
+
+# Local-only files and test artifacts.
+/.git
+/.vercel
+/tests
+/database/database.sqlite
+/storage/logs

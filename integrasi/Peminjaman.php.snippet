@@ -1,0 +1,13 @@
+// Tambahkan import ke app/Models/Peminjaman.php jika model ini sudah ada.
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+// Tambahkan method ini ke dalam class Peminjaman:
+public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+}
+
+// Pada method penyimpanan peminjaman lama, setelah data tervalidasi:
+// $peminjaman->user_id = auth()->id();
+// $peminjaman->save();

@@ -1,0 +1,9 @@
+// Tambahkan import pada bootstrap/app.php:
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+
+// Gabungkan di callback ->withMiddleware(function (Middleware $middleware) { ... }):
+$middleware->alias([
+    'role' => RoleMiddleware::class,
+    'permission' => PermissionMiddleware::class,
+]);

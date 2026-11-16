@@ -1,0 +1,685 @@
+{
+  "info": {
+    "_postman_id": "b7f0b7d4-3d80-4b1c-9b7e-modul3buku",
+    "name": "Modul III - API Perpustakaan Buku",
+    "description": "Kumpulan pengujian sesuai Tugas Praktikum Modul III: CRUD, validasi, pencarian/filter/pagination, rekap. Semua request menyertakan Accept: application/json. Atur base_url ke http://127.0.0.1:8000 sebelum menjalankan.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "buku_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - GET daftar buku",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Response JSON', () => pm.response.to.be.json);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - GET pencarian, filter, pagination",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ],
+          "query": [
+            {
+              "key": "cari",
+              "value": "laravel",
+              "disabled": false
+            },
+            {
+              "key": "kategori",
+              "value": "1",
+              "disabled": false
+            },
+            {
+              "key": "tahun",
+              "value": "2024",
+              "disabled": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "disabled": false
+            }
+          ]
+        },
+        "description": "Query parameter opsional. Ubah nilainya sesuai data yang ada."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Memiliki data dan meta pagination', () => { const j=pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j).to.have.property('meta'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - POST tambah buku valid",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"kategori_id\": 1,\n  \"judul\": \"Buku Uji Modul Tiga\",\n  \"penulis\": \"Fahrul Rhezi\",\n  \"tahun_terbit\": 2024\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('Response JSON', () => pm.response.to.be.json);",
+              "const j=pm.response.json();",
+              "const buku = j.data || j.buku || j;",
+              "if (buku && buku.id) pm.collectionVariables.set('buku_id', String(buku.id));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Validasi semua field kosong",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Response memiliki errors', () => pm.expect(pm.response.json()).to.have.property('errors'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Validasi judul terlalu pendek",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"kategori_id\": 1,\n  \"judul\": \"AB\",\n  \"penulis\": \"Fahrul Rhezi\",\n  \"tahun_terbit\": 2024\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Response memiliki errors', () => pm.expect(pm.response.json()).to.have.property('errors'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Validasi tahun di luar batas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"kategori_id\": 1,\n  \"judul\": \"Buku Validasi Tahun\",\n  \"penulis\": \"Fahrul Rhezi\",\n  \"tahun_terbit\": 1800\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Response memiliki errors', () => pm.expect(pm.response.json()).to.have.property('errors'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Validasi kategori tidak valid",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"kategori_id\": 9999,\n  \"judul\": \"Buku Kategori Salah\",\n  \"penulis\": \"Fahrul Rhezi\",\n  \"tahun_terbit\": 2024\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Response memiliki errors', () => pm.expect(pm.response.json()).to.have.property('errors'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Validasi judul bukan teks",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"kategori_id\": 1,\n  \"judul\": 12345,\n  \"penulis\": \"Fahrul Rhezi\",\n  \"tahun_terbit\": 2024\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Response memiliki errors', () => pm.expect(pm.response.json()).to.have.property('errors'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - GET detail buku",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku/{{buku_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku",
+            "{{buku_id}}"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - PUT update sebagian (judul saja)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku/{{buku_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku",
+            "{{buku_id}}"
+          ]
+        },
+        "description": "Sesuai skenario update sebagian pada PDF. UpdateBukuRequest memakai sometimes untuk field yang tidak dikirim.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"judul\": \"Buku Uji Modul Tiga Diperbarui\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - DELETE buku uji",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku/{{buku_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku",
+            "{{buku_id}}"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - GET ID tidak ditemukan",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/buku/999999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "buku",
+            "999999"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - GET rekap buku per kategori",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/rekap/buku-per-kategori",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "rekap",
+            "buku-per-kategori"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - GET rekap peminjaman per buku (ejaan PDF)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/rekap/pemminjaman-per-buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "rekap",
+            "pemminjaman-per-buku"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - GET rekap peminjaman per buku (ejaan benar)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/rekap/peminjaman-per-buku",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "rekap",
+            "peminjaman-per-buku"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

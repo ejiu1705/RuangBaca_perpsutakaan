@@ -1,0 +1,10 @@
+// Gabungkan ke callback ->withMiddleware(...) yang SUDAH ADA di bootstrap/app.php.
+// Jangan membuat callback withMiddleware kedua jika sudah tersedia.
+
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+
+$middleware->alias([
+    'role' => RoleMiddleware::class,
+    'permission' => PermissionMiddleware::class,
+]);

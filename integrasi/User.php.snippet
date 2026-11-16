@@ -1,0 +1,13 @@
+// Tambahkan import ini ke app/Models/User.php
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Peminjaman;
+
+// Gabungkan HasRoles dengan trait yang sudah ada di dalam class User.
+// Contoh: use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+// Tambahkan method berikut ke dalam class User jika belum ada:
+public function peminjamans(): HasMany
+{
+    return $this->hasMany(Peminjaman::class);
+}
