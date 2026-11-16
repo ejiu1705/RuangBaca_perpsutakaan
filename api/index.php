@@ -18,6 +18,26 @@ if (
 putenv('VIEW_COMPILED_PATH=' . $compiledViews);
 $_ENV['VIEW_COMPILED_PATH'] = $compiledViews;
 $_SERVER['VIEW_COMPILED_PATH'] = $compiledViews;
+// Diagnostik URI request dari Vercel.
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+
+error_log(
+    'RUANGBACA_DIAG_URI_PATH: ' .
+    (parse_url($requestUri, PHP_URL_PATH) ?: '[EMPTY]')
+);
+
+foreach ([
+    'SCRIPT_NAME',
+    'PHP_SELF',
+    'PATH_INFO',
+    'REDIRECT_URL',
+    'HTTP_X_NOW_ROUTE_MATCHES',
+] as $key) {
+    error_log(
+        'RUANGBACA_DIAG_' . $key . ': ' .
+        ($_SERVER[$key] ?? '[NOT SET]')
+    );
+}
 
 // Diagnostik sementara untuk Runtime Logs Vercel.
 error_log('RUANGBACA_DIAG_VIEW_PATH: ' . $compiledViews);
