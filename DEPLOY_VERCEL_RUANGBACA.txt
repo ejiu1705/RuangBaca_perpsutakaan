@@ -1,0 +1,18 @@
+RUANGBACA - PAKET SUMBER UNTUK GITHUB & VERCEL
+
+1. Ekstrak isi ZIP ke folder proyek Laravel.
+2. Jangan unggah file .env. Salin .env.example menjadi .env hanya untuk pengembangan lokal.
+3. Jalankan composer install dan npm ci.
+4. Atur .env lokal menggunakan Supabase Session Pooler (port 5432).
+5. Pastikan bootstrap/cache hanya berisi .gitignore sebelum Composer menjalankan package discovery.
+6. Untuk GitHub, pastikan .env, vendor, node_modules, dan bootstrap/cache/*.php tidak ikut commit.
+7. Vercel menggunakan vercel.json dan runtime PHP yang sudah disertakan.
+8. Isi Environment Variables Production di Vercel dengan APP_KEY yang valid, APP_ENV=production, APP_DEBUG=false, serta kredensial Supabase Transaction Pooler (port 6543).
+9. Atur VIEW_COMPILED_PATH=/tmp/ruangbaca/views di Vercel.
+10. Setelah mengatur Environment Variables, lakukan Redeploy.
+
+PENTING:
+- Jangan menjalankan migrate:fresh pada database produksi.
+- Jalankan php artisan migrate --force hanya setelah memastikan backup dan target database benar.
+- Jangan commit .env, password, APP_KEY, atau file bootstrap/cache/*.php.
+- Paket ini tidak menyertakan vendor dan node_modules; keduanya dipasang ulang saat build.
