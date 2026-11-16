@@ -1,4 +1,3 @@
-
 <?php
 
 // Direktori sementara untuk compiled Blade Views.
